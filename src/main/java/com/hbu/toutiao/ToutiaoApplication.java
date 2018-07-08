@@ -15,6 +15,5 @@ public class ToutiaoApplication {
 	}*/
 	public static void main(String[] args) {
 		SpringApplication.run(ToutiaoApplication.class, args);
-		//new SpringApplicationBuilder(ToutiaoApplication.class).web(true).run(args);
 	}
 }
