@@ -1,0 +1,59 @@
+#parse("header.vm")
+文件上传：
+    <form action="/user/setAvatar" method="post" enctype="multipart/form-data" name="upload_form">
+        <h1>采用流的方式上传文件</h1>
+        <input type="file" name="file">
+        <input type="submit" value="upload"/>
+    </form>
+
+
+<script type="text/javascript" >
+    function selImg(s){
+        alert(s);
+        var editor = document.getElementById('editor');
+        var img = document.createElement('img');
+        var iUrl= 'http://p5mgpfjck.bkt.clouddn.com/01.jpg';
+        img.width='800';
+        img.height='400';
+        img.src=iUrl;
+        editor.appendChild(img);
+        alert("执行到这了");
+    }
+
+</script>
+
+#*<textarea id="txt" cols=60 rows=8></textarea><br>*#
+
+
+
+<form action="/user/addnews" method="post" >
+    <table id="table">
+        <tr>
+            <td><input name="title" type="text" placeholder="标题"  style="width:800px;"> </td>
+        </tr>
+        <tr>
+            <td>
+                #if ($imageUrl)
+
+                    <img src="$imageUrl" width="304" height="228">
+                #end
+            </td>
+        </tr>
+        <tr>
+            <td><div contentEditable="true" name="text" id="editor"  style="height:2000px;width:800px;border-style:solid; border-width:1px; border-color:#AEEEEE"></div></td>
+            #*<td><textarea name="text" rows="8" placeholder="正文" cols="50" style="width:800px;"></textarea></td>*#
+        </tr>
+        <tr>
+            <td>    <input id="img" type="file" value="选择图片"></td>
+            <td><input type="button" value="添加" onclick="selImg(img.value)"></td>
+            <td><input type="submit" value="发布"/></td>
+        </tr>
+    </table>
+
+</form>
+
+
+#*    #if ($imageUrl)
+    <img src="$imageUrl">
+    #end*#
+#parse("footer.vm")

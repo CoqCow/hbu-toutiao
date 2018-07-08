@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>河大头条 - 头条网</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="keywords" content="读《Web 全栈工程师的自我修养》">
+    <meta name="description" content="您发布的就是头条，就在河大头条。">
+    <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles/font-awesome.min.css">
+    <link rel="stylesheet" media="all" href="/styles/style.css">
+    <script type="text/javascript" src="/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/scripts/main/base/base.js"></script>
+    <script type="text/javascript" src="/scripts/main/base/util.js"></script>
+    <script type="text/javascript" src="/scripts/main/base/event.js"></script>
+    <script type="text/javascript" src="/scripts/main/base/upload.js"></script>
+    <script type="text/javascript" src="/scripts/main/component/component.js"></script>
+    <script type="text/javascript" src="/scripts/main/component/popup.js"></script>
+    <script type="text/javascript" src="/scripts/main/component/popupLogin.js"></script>
+    <script type="text/javascript" src="/scripts/main/component/upload.js"></script>
+    <script type="text/javascript" src="/scripts/main/component/popupUpload.js"></script>
+    <script type="text/javascript" src="/scripts/main/util/action.js"></script>
+    <script type="text/javascript" src="/scripts/main/site/home.js"></script>
+    <script>
+        function check(){
+            var p=document.getElementById("p1").value;
+            if(p.length<=5){
+                document.getElementById("warning").innerHTML="   密码长度应大于6位";
+                return false;
+            }
+            if(document.getElementById("p2").value!=
+                    document.getElementById("p1").value)
+            {
+                document.getElementById("warning").innerHTML="   两次密码的输入不一致";
+                return false;
+            }else{
+                document.getElementById("warning").innerHTML="   ";
+                return true;
+            }
+        }
+        var wait=120;
+        var realcode=-1;
+        function time(o) {
+            if(wait==120){
+                var Util = Base.getClass('main.base.Util');
+                var mailvalue=document.getElementById("mail").value;
+                if (!Util.isEmail(mailvalue)) {
+                    document.getElementById("mailwarning").innerHTML="请填写正确邮箱";
+                   // alert("sdfs");
+                    return ;
+                }
+                //ajax请求服务器
+                $.ajax({
+                    type: "POST", //请求的方式，也有get请求
+                    url: "/verifyCode/", //请求地址，后台提供的,这里我在本地自己建立了个json的文件做例子
+                    data: {mail:mailvalue},//data是传给后台的字段，后台需要哪些就传入哪些
+                    dataType: "JSON", //json格式，后台返回的数据为json格式的。
+                    success: function(result){
+                        var jsonDate = result; //返回的result为json格式的数据
+                        //alert(typeof dataObj);
+                        //console.log(jsonDate .msg);
+                        //console.log(jsonDate .code);
+                        //alert(code);
+                        if(jsonDate.code>0){
+                            document.getElementById("mailwarning").innerHTML="注册码已经发出，2分钟内有效";
+                            realcode=jsonDate.code;//保存验证码
+                            //alert(code);
+                            return ;
+                        }
+                        if(jsonDate.code==-2){
+                            document.getElementById("mailwarning").innerHTML="注册码下发失败，邮箱不存在";
+                            return ;
+                            //that.emit('done');
+                        }
+                        if(jsonDate.code==-1){
+                            document.getElementById("mailwarning").innerHTML="该邮箱已经注册过了";
+                            wait=0;
+                            //that.emit('done');
+                        }
+                        /*                        con = "";
+                                                $.each(dataObj, function(index, item){
+                                                    con += item;
+                                                });
+                                                console.log(con);    //可以在控制台打印一下看看，这是拼起来的标签和数据*/
+                    }
+
+                });
+            }
+            //alert("点击了");
+            if (wait == 0) {
+                o.removeAttribute("disabled");
+                o.value="点我获取邮箱验证码";
+                wait = 120;
+                realcode=-1;//验证码过期
+            } else {
+                o.setAttribute("disabled", true);
+                o.value=wait+"秒后重新发送";
+                wait--;
+                setTimeout(function() {
+                            time(o)
+                        },
+                        1000)
+            }
+
+
+        }
+
+        function verifyCode(){
+            var code=document.getElementById("code").value;
+            //alert(code.length)
+            if(code.length!=0) {
+                //验证输入验证码是否正却 codewarning
+                if(realcode==code){
+                    document.getElementById("codewarning").innerHTML="验证通过";
+                    return true;
+
+                }else {
+                    document.getElementById("codewarning").innerHTML="验证码输入错误";
+                    return false;               }
+            }else {
+                return false;
+            }
+
+        }
+        function vsubmit(){
+            return (check())&&(verifyCode());
+        }
+    </script>
+    <style type="text/css">
+        .round_icon{
+            width: 50px;
+            height: 50px;
+            display: flex;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            float: right;
+        }
+        #warning,#mailwarning,#codewarning{
+            position:absolute;
+            color:red;
+            font-size: 20px;
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none;
+        }
+        h1 {
+            font-size: 40px;
+            color: #fff;
+            margin: 50px 0px 80px 0px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 15px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 93.5%;
+            padding: 15px;
+            border: 1px solid #7d7d7d;
+            outline: none;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border-radius: 25px;
+        }
+
+        input[type="submit"] {
+            background: #e91e63;
+            padding: 13px 0;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+            transition: 0.5s all;
+            -webkit-transition: 0.5s all;
+            -moz-transition: 0.5s all;
+            -o-transition: 0.5s all;
+            -ms-transition: 0.5s all;
+            width: 100%;
+            border: none;
+            margin-top: 25px;
+            border-radius: 25px;
+        }
+
+        input[type="radio"]:hover {
+            padding: 13px 0;
+            font-size: 5px;
+        }
+
+        input[type="submit"]:hover {
+            background: #081148;
+        }
+
+        .body {
+
+            background-size: 100%;
+            background:url("../images/img/loginbg0.jpg") no-repeat;
+        }
+
+        .book-form {
+            padding: 2em;
+            font-size: 1.8em;
+            text-align: left;
+            color: #7d7d7d;
+            margin-bottom: 1.5em;
+        }
+
+        .main {
+            width: 35%;
+            height: 100%;
+            float: left;
+            margin: 0% 30%;
+        }
+    </style>
+
+</head>
+<body class="welcome_index" >
+
+<header class="navbar navbar-default navbar-static-top bs-docs-nav" id="top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a href="/" class="navbar-brand logo">
+                <h1>河大头条</h1>
+                <h3>您发布的才是头条</h3>
+            </a>
+        </div>
+
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav navbar-right">
+
+                #if ($user)
+                    <li class="js-share"><a href="javascript:void(0);">分享</a></li>
+                    <li class=""><a href="/msg/list">站内信</a></li>
+                    <li class=""><a href="/user/$!{user.id}/">$!{user.name}
+                    <li class=""><a href="/logout/">退出登录</a></li></a></li>
+
+                    <a href="/user/toSetAvatar"><img src="$!{user.headUrl}"  class="round_icon" id="round_icon" alt=""/></a>
+                #else
+                    <li class="js-login"><a href="javascript:void(0);">登陆</a></li>
+                #end
+            </ul>
+
+        </nav>
+    </div>
+</header>
+<div class="main" id="mian" >
+    <div class="book-form">
+        <h3>注册账户</h3>
+        <form action="/register/" method="post"  onsubmit="return vsubmit();">
+            <h6 class="msg">
+                <font color=#ff0000>$!{hashMap.msg}</font>
+            </h6>
+            <p>昵称（注册后可修改）</p>
+            <input type="text" name="nickname" placeholder="昵称" maxlength="30" />
+            <p>邮箱（登录账号，不可修改）</p>
+            <input type="text" name="mail" id="mail" placeholder="邮箱" "><text id="mailwarning">   </text>
+            <p>邮箱验证码</p>
+            <input type="text"  name="code" id="code" autocomplete="off" onblur="verifyCode()" placeholder="邮箱验证码" maxlength="5" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpaste="return false"><text id="codewarning"> </text>
+            <input type="button" id="btn" value="点我获取邮箱验证码" onclick="time(this)">
+            <p>密码（注册后可修改）</p>
+            <input type="password" id="p1"  name="password" placeholder="密码" maxlength="20" required />
+            <p>重复密码</p>
+            <input type="password"  class="repassword" id="p2"
+                   placeholder="重复密码" onblur="check()" required /> <text id="warning">   </text>
+            <input type="submit" value="点击注册" />
+        </form>
+    </div>
+</div>
+#parse("footer.vm")
