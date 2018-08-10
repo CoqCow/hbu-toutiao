@@ -1,18 +1,28 @@
 package com.hbu.toutiao.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * Created by Lenovo on 2017/12/25.
  */
 @Component
+@Getter
+@Setter
+@ToString
 public class User {
     private int id;
     private String name;
+    private String email;
     private String password;
     private String salt;
     private String headUrl;
-
+    private Date last_login_dt;
+    private Date last_change_time;
     public User() {
 
     }
@@ -21,56 +31,5 @@ public class User {
         this.password = "";
         this.salt = "";
         this.headUrl = "";
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public String getHeadUrl() {
-        return headUrl;
-    }
-
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", headUrl='" + headUrl + '\'' +
-                '}';
     }
 }
