@@ -4,11 +4,10 @@ package com.hbu.toutiao.service;
 import com.hbu.toutiao.util.JedisAdapter;
 import com.hbu.toutiao.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by nowcoder on 2016/7/13.
- */
+
 @Service
 public class LikeService {
     @Autowired

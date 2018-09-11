@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * Created by nowcoder on 2016/7/2.
+ * Created by niu on 2017/7/2.
  */
 @Mapper
 @Component
@@ -25,6 +25,9 @@ public interface UserDAO {
 
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where name=#{name}"})
     User selectByName(String name);
+
+    @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where email=#{email}"})
+    User selectByEmail(String email);
 
     @Update({"update ", TABLE_NAME, " set password=#{password} where id=#{id}"})
     void updatePassword(User user);
