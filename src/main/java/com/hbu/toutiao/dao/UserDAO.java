@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public interface UserDAO {
     String TABLE_NAME = "user";
     String INSET_FIELDS = " name, password, salt, head_url ";
-    String SELECT_FIELDS = " id, name, password, salt, head_url";
+    String SELECT_FIELDS = " id, name, password, salt, head_url,email,last_login_dt,last_change_time";
 
     @Insert({"insert into ", TABLE_NAME, "(", INSET_FIELDS,
             ") values (#{name},#{password},#{salt},#{headUrl})"})
