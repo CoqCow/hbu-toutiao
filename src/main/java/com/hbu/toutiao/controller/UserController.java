@@ -24,7 +24,7 @@ public class UserController {
             String token = tokenService.creatToken(loginDto);
             return ResponseEntity.ok(token);
         } catch (InvalidLoginInfoException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("EMAIL_OF_PASSWORD_ERROR");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResultModel(ResultMsg.EMAIL_OF_PASSWORD_ERROR,"/tokens"));
         }
     }
 
@@ -35,9 +35,9 @@ public class UserController {
             String token = tokenService.refreshToken(oldToken);
             return ResponseEntity.ok(token);
         } catch (JWTTokenExpiredException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("TOKEN_EXPIRED");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResultModel(ResultMsg.TOKEN_EXPIRED,"/tokens/refresh"));
         } catch (JWTTokenInvalidException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("TOKEN_INVALID");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResultModel(ResultMsg.TOKEN_INVALID,"/tokens/refresh"));
         }
     }
 }
