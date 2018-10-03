@@ -26,7 +26,6 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
-      // System.out.println("id="+httpServletRequest.getParameter("id"));
         int id=Integer.parseInt(httpServletRequest.getParameter("id"));
         if(loginUser.get(id)==false){
             System.out.println("没有登录");
@@ -34,8 +33,6 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
         }else {
             System.out.println("已经登录");
         }
-       ///
-
 
         if (hostHolder.getUser() == null) {
             httpServletResponse.sendRedirect("/?pop=1");
